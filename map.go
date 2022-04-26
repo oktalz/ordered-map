@@ -112,8 +112,8 @@ func (o *OrderedMap[K, V]) Map() map[K]V {
 	return o.data
 }
 
-// Slice returns slice of values. Order of values is order of insertion
-func (o *OrderedMap[K, V]) Slice() []V {
+// Values returns slice of values. Order of values is order of insertion
+func (o *OrderedMap[K, V]) Values() []V {
 	c := o.Cursor()
 	result := []V{}
 	for c.Reset(); c.Valid(); c.Next() {

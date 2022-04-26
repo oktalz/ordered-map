@@ -32,7 +32,7 @@ func TestStringStruct(t *testing.T) {
 		t.Fatalf("counter should be 3 and it it %d", counter)
 	}
 
-	sl := m.Slice()
+	sl := m.Values()
 	if len(sl) != 3 {
 		t.Fatalf("len should be 3 and it it %d", len(sl))
 	}

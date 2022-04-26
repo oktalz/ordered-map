@@ -42,7 +42,7 @@ func Example() {
 	fmt.Println(m.Map())
 
 	// get in ordered way
-	fmt.Println(m.Slice())
+	fmt.Println(m.Values())
 
 	// print keys
 	fmt.Println(m.Keys())
