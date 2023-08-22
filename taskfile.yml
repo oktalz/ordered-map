@@ -33,7 +33,7 @@ tasks:
   test:
     desc: 'run Go tests'
     cmds:
-      - go test ./...
+      - go test ./... -coverprofile=coverage.out
 
   lint:
     desc: 'run Go linters'

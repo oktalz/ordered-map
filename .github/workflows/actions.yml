@@ -32,18 +32,38 @@ jobs:
         run: go mod tidy
       - name: changes
         run: test -z "$(git diff 2> /dev/null)" || exit "Go modules not tidied, issue \`go mod tidy\` and commit the result"
-  go_build_test:
+  test:
     name: test
     needs: ["lint","tidy"]
     runs-on: ubuntu-latest
     steps:
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v3
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version-file: 'go.mod'
-      id: go
-    - name: Test
-      run: |
-        go test ./...
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+      - name: Run tests
+        run: |
+          go test ./... -coverprofile=coverage.out
+      - name: Generate diff
+        if: github.event_name == 'pull_request'
+        run: |
+          git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
+      - name: Compute new code coverage
+        if: github.event_name == 'pull_request'
+        id: covdiffaction
+        uses: panagiotisptr/cov-diff@main
+        with:
+          path: .
+          coverprofile: coverage.out
+          diff: pr.diff
+          module: github.com/panagiotisptr/cov-diff
+      - name: Comment
+        if: github.event_name == 'pull_request'
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Code coverage on new code: ${{ steps.covdiffaction.outputs.covdiff }}%
