@@ -1,0 +1,49 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  lint:
+    name: golangci-lint
+    needs: []
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+      - name: Install Task
+        uses: arduino/setup-task@v1
+      - name: Lint
+        run: |
+          task lint
+  tidy:
+    name: go mod tidy
+    needs: ["lint"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+      - name: tidy
+        run: go mod tidy
+      - name: changes
+        run: test -z "$(git diff 2> /dev/null)" || exit "Go modules not tidied, issue \`go mod tidy\` and commit the result"
+  go_build_test:
+    name: test
+    needs: ["lint","tidy"]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v3
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: 'go.mod'
+      id: go
+    - name: Test
+      run: |
+        go test ./...

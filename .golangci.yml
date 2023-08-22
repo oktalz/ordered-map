@@ -1,0 +1,37 @@
+linters-settings:
+  govet:
+    check-shadowing: true
+  gocyclo:
+    min-complexity: 30
+  cyclop:
+    max-complexity: 30
+
+linters:
+  enable-all: true
+  disable:
+    - nlreturn
+    - wsl
+    - funlen
+    - paralleltest
+    - godot
+    - varnamelen
+    - dupword
+    - exhaustruct
+    - depguard
+    - testableexamples
+    - nonamedreturns
+    - ifshort
+    - structcheck
+    - ireturn # broken, does not understand generics
+    - golint # deprecated
+    - nosnakecase # deprecated
+    - deadcode # deprecated
+    - maligned # deprecated
+    - interfacer # deprecated
+    - varcheck # deprecated
+    - scopelint # deprecated
+    - exhaustivestruct # deprecated
+
+run:
+  skip-dirs:
+    - test
