@@ -61,7 +61,7 @@ func TestIntString(t *testing.T) {
 		t.Fatalf("key should be `42` but it is %s", value)
 	}
 
-	sl := m.Slice()
+	sl := m.Values()
 	if len(sl) != 3 {
 		t.Fatalf("len should be 3 and it it %d", len(sl))
 	}
@@ -98,7 +98,7 @@ func TestIntString(t *testing.T) {
 		t.Fatalf("value should be `3` but its [%s]", v)
 	}
 
-	v, err = m.GetByIndex(1000)
+	_, err = m.GetByIndex(1000)
 	if err == nil {
 		t.Fatal("error not thrown")
 	}
@@ -111,7 +111,7 @@ func TestIntString(t *testing.T) {
 		t.Fatalf("value should be `3` but its [%s]", v)
 	}
 
-	index, err = m.Index(3000)
+	_, err = m.Index(3000)
 	if err == nil {
 		t.Fatal("error not thrown")
 	}

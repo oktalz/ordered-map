@@ -43,7 +43,7 @@ func (o *OrderedMap[K, V]) GetByIndex(index int) (V, error) {
 
 	key := o.keys[index]
 
-	result, _ = o.data[key]
+	result = o.data[key]
 	return result, nil
 }
 
@@ -130,11 +130,11 @@ func (o *OrderedMap[K, V]) Keys() []K {
 
 // Cursor return Cursor that can be used to iterate over values
 //
-//  c := m.Cursor()
-//  for c.Reset(); c.Valid(); c.Next() {
-//    index, key, value := c.Value()
-//    ...
-//  }
+//	c := m.Cursor()
+//	for c.Reset(); c.Valid(); c.Next() {
+//	  index, key, value := c.Value()
+//	  ...
+//	}
 func (o *OrderedMap[K, V]) Cursor() Cursor[K, V] {
 	cur := Cursor[K, V]{
 		r: o,
