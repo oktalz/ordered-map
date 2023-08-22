@@ -48,6 +48,13 @@ jobs:
       - name: Run tests
         run: |
           go test ./... -coverprofile=coverage.out
+      - name: Display coverage
+        id: coverage
+        run: |
+          go tool cover -func coverage.out | tee coverage.output
+          echo 'CODE_COVERAGE<<EOF' >> $GITHUB_ENV
+          cat coverage.output >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: Generate diff
         if: github.event_name == 'pull_request'
         run: |
@@ -65,5 +72,10 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: mshick/add-pr-comment@v2
         with:
+          message-id: code-coverage
           message: |
             Code coverage on new code: ${{ steps.covdiffaction.outputs.covdiff }}%
+            Code coverage (total):
+            ```
+            ${{ env.CODE_COVERAGE }}%
+            ```
