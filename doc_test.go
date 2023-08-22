@@ -18,7 +18,10 @@ func Example() {
 	m.Delete("2") // map[1:{1 1} 3:{3 3}]
 
 	// insert to specific index
-	m.Insert(1, "42", customType{42, "42"}) // map[1:{1 1} 3:{3 3} 42:{42 42}] order:[1 42 3]
+	err := m.Insert(1, "42", customType{42, "42"}) // map[1:{1 1} 3:{3 3} 42:{42 42}] order:[1 42 3]
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	c := m.Cursor()
 	for c.Reset(); c.Valid(); c.Next() { // c.Reset() is not needed on first run
@@ -33,10 +36,11 @@ func Example() {
 	}
 
 	// get by index
-	v, err := m.GetByIndex(1)
+	v, err = m.GetByIndex(1)
 	if err != nil {
-		fmt.Println(v)
+		fmt.Println(err.Error())
 	}
+	fmt.Println(v)
 
 	// get whole map
 	fmt.Println(m.Map())
@@ -48,7 +52,7 @@ func Example() {
 	fmt.Println(m.Keys())
 }
 
-// This is a package-level example:
+// This is a package-level example
 func ExampleCursor() {
 	m := orderedmap.New[string, customType]()
 

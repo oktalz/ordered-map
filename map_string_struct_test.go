@@ -19,7 +19,10 @@ func TestStringStruct(t *testing.T) {
 	m.Set("3", customType{3, "3"})
 	m.Delete("2")
 
-	m.Insert(1, "42", customType{42, "42"})
+	err := m.Insert(1, "42", customType{42, "42"})
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
 
 	c := m.Cursor()
 
